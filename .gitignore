@@ -1,0 +1,16 @@
+# Node.js dependencies
+node_modules/
+
+# Sensitive information
+.env
+
+# Logs and system files
+
+*.log
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# VSCode files
+.vscode/
