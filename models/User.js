@@ -9,6 +9,7 @@ const User = sequelize.define(
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
+            allowNull: false,
         },
         email: {
             type: DataTypes.STRING,
@@ -27,6 +28,7 @@ const User = sequelize.define(
     {
         underscored: true,
         timestamps: true,
+        tableName: 'Users',
         defaultScope: {
             attributes: { exclude: ['password_hash'] },
         },

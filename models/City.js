@@ -8,6 +8,7 @@ const City = sequelize.define(
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
+            allowNull: false,
         },
         name: {
             type: DataTypes.STRING,
@@ -33,6 +34,7 @@ const City = sequelize.define(
     {
         underscored: true,
         timestamps: false,
+        tableName: 'Cities',
         indexes: [
             { fields: ['name'] }
         ]

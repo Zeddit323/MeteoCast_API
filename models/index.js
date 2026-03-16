@@ -4,9 +4,9 @@ import City from "./City.js";
 
 const establishRelationship = () => {
     User.belongsToMany(City, { 
-    through: "UserCities",
-    foreignKey: "user_id",
-    otherKey: "city_id",
+        through: "UserCities",
+        foreignKey: "user_id",
+        otherKey: "city_id",
     });
 
     City.belongsToMany(User, { 
