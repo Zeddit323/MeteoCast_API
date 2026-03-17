@@ -2,6 +2,9 @@ import "dotenv/config";
 import express from 'express';
 import sequelize from "./config/db.js";
 import { establishRelationship, User } from "./models/index.js";
+import errorHandler from "./middleware/errorHandler.js";
+import authRoutes from "./routes/authRoutes.js";
+import cityRoutes from "./routes/cityRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT;
@@ -26,6 +29,13 @@ const startDatabaseConnection = async () => {
 }
 
 await startDatabaseConnection();
+
+
+app.use('/auth', authRoutes);
+app.use('/cities', cityRoutes);
+
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`)
