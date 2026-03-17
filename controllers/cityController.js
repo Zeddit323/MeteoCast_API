@@ -37,7 +37,7 @@ export const getMyCity = async (req, res) => {
 
     res.status(200).json({
         status: "success",
-        result: city
+        data: { city }
     });
 };
 
