@@ -5,11 +5,21 @@ import { establishRelationship, User } from "./models/index.js";
 import errorHandler from "./middleware/errorHandler.js";
 import authRoutes from "./routes/authRoutes.js";
 import cityRoutes from "./routes/cityRoutes.js";
+import cors from "cors";
 
 const app = express();
 const PORT = process.env.PORT;
+const FRONTEND_URL = process.env.FRONTEND_URL;
 
 app.use(express.json());
+
+const corsOptions = {
+    origin: FRONTEND_URL,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    credentials: true
+};
+
+app.use(cors(corsOptions));
 
 app.get('/', (req, res) => {
     res.status(200).json({ message: "Everything is working!" });
