@@ -15,7 +15,7 @@ export const register = async (req, res) => {
 
     res.status(201).json({
         status: "success",
-        message: "User registered successfully",
+        message: "User registered successfully.",
         userId: user.id
     });
 };
@@ -26,12 +26,12 @@ export const login = async (req, res) => {
     const existingUser = await User.scope("withPassword")
         .findOne({ where: { email: email } });
     if (!existingUser) {
-        throw new ApiError("Incorrect email or password", 401);
+        throw new ApiError("Incorrect email or password.", 401);
     }
     const isMatch = await existingUser.correctPassword(password, existingUser.password_hash);
 
     if (!isMatch) {
-        throw new ApiError("Incorrect email or password", 401);
+        throw new ApiError("Incorrect email or password.", 401);
     }
 
     const token = jwt.sign(
@@ -40,13 +40,37 @@ export const login = async (req, res) => {
         { expiresIn: '1d' }
     );
 
+    const cookieOptions = {
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        path: '/',
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Lax',
+    };
+
+    res.cookie('jwt', token, cookieOptions);
+
     existingUser.last_login = new Date();
     await existingUser.save();
 
     res.status(200).json({
         status: "success",
-        token,
-        user: { id: existingUser.id, email: existingUser.email }
+        message: "Logged in successfully!"
+    });
+};
+
+
+export const logout = async (req, res) => {
+    res.clearCookie('jwt', {
+        path: '/',
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: "Lax"
+    });
+
+    res.status(200).json({
+        status: "success",
+        message: "Logget out successfully!"
     });
 };
 
@@ -60,7 +84,7 @@ export const forgotPassword = async (req, res) => {
     if (!existringUser) {
         return res.status(200).json({
             status: "success",
-            message: "Reset link sent"
+            message: "Reset link sent."
         })
     }
 
@@ -72,7 +96,7 @@ export const forgotPassword = async (req, res) => {
 
     await existringUser.update({
         reset_password_token: hashedToken,
-        reset_password_expires: Date.now() + 15 * 60 * 1000
+        reset_password_expires: new Date(Date.now() + 15 * 60 * 1000)
     });
 
     console.log(`Reset link: http://localhost:3000/auth/reset-password/${resetToken}`);
@@ -99,7 +123,7 @@ export const resetPassword = async (req, res) => {
     });
 
     if (!existingUser) {
-        throw new ApiError("Token is invalid or expired", 401);
+        throw new ApiError("Token is invalid or expired.", 401);
     }
 
     existingUser.password_hash = password;
@@ -110,6 +134,28 @@ export const resetPassword = async (req, res) => {
     
     res.status(200).json({
         status: "success",
-        message: "Password reset successful"
+        message: "Password reset successful!"
+    });
+};
+
+export const deleteAccount = async (req, res) => {
+    const userToDelete = req.user;
+
+    if(!userToDelete){
+        throw new ApiError("No user found to delete.", 404);
+    }
+
+    await userToDelete.destroy();
+
+    res.clearCookie('jwt', {
+        path: '/',
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: "Lax"
+    });
+
+    res.status(200).json({
+        status: "success",
+        message: "Account deleted successfuly."
     });
 };

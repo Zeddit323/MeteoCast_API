@@ -1,27 +1,28 @@
 {
-  "name": "meteocast_api",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "nodemon"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "dotenv": "^17.3.1",
-    "nodemon": "^3.1.14",
-    "sequelize-cli": "^6.6.5"
-  },
-  "dependencies": {
-    "bcrypt": "^6.0.0",
-    "cors": "^2.8.6",
-    "express": "^5.2.1",
-    "jsonwebtoken": "^9.0.3",
-    "pg": "^8.19.0",
-    "pg-hstore": "^2.3.4",
-    "sequelize": "^6.37.7"
-  },
-  "type": "module"
+    "name": "meteocast_api",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "nodemon"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "dotenv": "^17.3.1",
+        "nodemon": "^3.1.14",
+        "sequelize-cli": "^6.3.0"
+    },
+    "dependencies": {
+        "bcrypt": "^6.0.0",
+        "cookie-parser": "^1.4.7",
+        "cors": "^2.8.6",
+        "express": "^5.2.1",
+        "jsonwebtoken": "^9.0.3",
+        "pg": "^8.19.0",
+        "pg-hstore": "^2.3.4",
+        "sequelize": "^6.37.7"
+    },
+    "type": "module"
 }

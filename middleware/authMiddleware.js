@@ -4,13 +4,15 @@ import ApiError from "../utils/apiError.js";
 import { User } from "../models/index.js";
 
 const protect = async (req, res, next) => {
-    const authHeader = req.headers.authorization;
+    let token;
 
-    if (!authHeader || !authHeader.startsWith('Bearer')) {
-        throw new ApiError("Please log in to access this route.", 401);
+    if (req.cookies.jwt) {
+        token = req.cookies.jwt;
     }
 
-    const token = authHeader.split(' ')[1];
+    if (!token) {
+         throw new ApiError("Not logged in.", 401);
+    }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
 

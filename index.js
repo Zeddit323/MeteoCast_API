@@ -6,12 +6,15 @@ import errorHandler from "./middleware/errorHandler.js";
 import authRoutes from "./routes/authRoutes.js";
 import cityRoutes from "./routes/cityRoutes.js";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 const app = express();
 const PORT = process.env.PORT;
 const FRONTEND_URL = process.env.FRONTEND_URL;
 
 app.use(express.json());
+app.use(cookieParser());
+
 
 const corsOptions = {
     origin: FRONTEND_URL,
