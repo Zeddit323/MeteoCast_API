@@ -71,3 +71,31 @@ export const sendPasswordResetConfirmationEmail = async (email) => {
         `,
     });
 };
+
+export const sendAccountDeletionConfirmation = async (email) => {
+    await transporter.sendMail({
+        from: '"Meteocast Support" <no-reply@meteocast.com>',
+        to: email,
+        subject: "Your account has been deleted",
+        text: "Your account has been deleted successfully. If this was you, you can safely ignore this email.",
+        html: `
+            <div style="color: #f9f9f9; background-image: linear-gradient(to right, #69D7FF, #00AFA7); font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #01555b; padding: 20px;">
+                <h2 style="color: #01555b;">Account Deleted Successfully</h2>
+                <p>Hi there,</p>
+                <p>This is a confirmation that your <strong>Meteocast</strong> account has been successfully closed and your
+                    data has been queued for removal.</p>
+                <div
+                    style="color: #00aab7; background-color: #caf0fd; padding: 15px; border-left: 4px solid #00AFA7; margin: 20px 0;">
+                    <p style="margin: 0;"><span style="color: #01555b;"><strong>Status:</strong></span> Account Closed</p>
+                    <p style="margin: 0;"><span style="color: #01555b;"><strong>Time:</strong></span> ${new
+                        Date().toUTCString()}</p>
+                </div>
+                <p>We're sorry to see you go. Please note that it may take a few days for all records to be completely purged
+                    from our systems.</p>
+                <p>If you did <strong>not</strong> request this deletion, please contact our support team immediately, though
+                    please be aware that account recovery may not be possible once the process is complete.</p>
+                <p>Best regards,<br>The Meteocast Team</p>
+            </div>
+        `,
+    });
+};

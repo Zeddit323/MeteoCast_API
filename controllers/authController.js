@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import ApiError from "../utils/apiError.js";
 import crypto from "crypto";
 import { Op } from "sequelize";
-import { sendPasswordResetConfirmationEmail, sendPasswordResetEmail } from "../utils/email.js";
+import { sendAccountDeletionConfirmation, sendPasswordResetConfirmationEmail, sendPasswordResetEmail } from "../utils/email.js";
 
 export const register = async (req, res) => {
     const { email, password } = req.body;
@@ -171,8 +171,10 @@ export const deleteAccount = async (req, res) => {
         sameSite: "Lax"
     });
 
+    await sendAccountDeletionConfirmation(req.user.email);
+
     res.status(200).json({
         status: "success",
-        message: "Account deleted successfuly."
+        message: "Account deleted successfully."
     });
 };
