@@ -16,18 +16,33 @@ const transporter = nodemailer.createTransport({
 
 export const sendPasswordResetEmail = async (email, link) => {
     await transporter.sendMail({
-        from: '"Meteocast Support" <no-reply@meteocast.com>', 
+        from: '"Meteocast Support" <no-reply@meteocast.com>',
         to: email,
         subject: "Password Reset Request",
-        text: `Forgot your password? Reset it here: ${link}`, 
+        text: `Forgot your password? Reset it here: ${link}`,
         html: `
-            <div style="font-family: sans-serif; line-height: 1.5;">
-                <p>Hi,</p>
-                <p>Forgot your password? No worries! Click the link below to reset it:</p>
-                <p><a href="${link}" style="color: #007bff;">Reset Password</a></p>
-                <p>If you didn't request this, you can safely ignore this email.</p>
-                <hr />
-                <p style="font-size: 0.8em; color: #555;">This link will expire in 10 minutes.</p>
+            <div style="color: #f9f9f9; background-image: linear-gradient(to right, #69D7FF, #00AFA7); font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #01555b; padding: 20px;">
+                <h2 style="color: #01555b;">Forgot your password?</h2>
+                <p>Hi there,</p>
+                <p>It happens to the best of us! We received a request to reset the password for your <strong>Meteocast</strong> account. You can get back into your account by clicking the button below to choose a new one:</p>
+                <div style="display: flex; justify-content: center;">
+                    <a style="
+                        width: 60%;
+                        padding: 3%;
+                        border-radius: 10px;
+                        border: none;
+                        background-color: #008b95;
+                        color: #f9f9f9;
+                        font-size: 1.3rem;
+                        font-weight: bold;
+                        text-decoration: none;
+                        text-align: center;"
+                        href="${link}"
+                    >
+                        Reset My Password</a>
+                </div>
+                <p>If you did <strong>not</strong> request this, please ignore this email; your password will stay exactly as it is. For your security, this link will expire in 24 hours.</p>
+                <p>Stay safe,<br>The Meteocast Team</p>
             </div>
         `,
     });
@@ -40,15 +55,17 @@ export const sendPasswordResetConfirmationEmail = async (email) => {
         subject: "Your password has been reset",
         text: "Success! Your Meteocast password was recently changed. If this was you, you can safely ignore this email.",
         html: `
-            <div style="font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; padding: 20px;">
-                <h2 style="color: #2d3436;">Password Changed Successfully</h2>
+            <div style="color: #f9f9f9; background-image: linear-gradient(to right, #69D7FF, #00AFA7); font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #01555b; padding: 20px;">
+                <h2 style="color: #01555b;">Password Changed Successfully</h2>
                 <p>Hi there,</p>
-                <p>This is a confirmation that the password for your <strong>Meteocast</strong> account has been successfully changed.</p>
-                <div style="background-color: #f9f9f9; padding: 15px; border-left: 4px solid #00b894; margin: 20px 0;">
-                    <p style="margin: 0;"><strong>Status:</strong> Completed</p>
-                    <p style="margin: 0;"><strong>Time:</strong> ${new Date().toUTCString()}</p>
+                <p>This is a confirmation that the password for your <strong>Meteocast</strong> account has been successfully
+                    changed.</p>
+                <div style="color: #00aab7; background-color: #caf0fd; padding: 15px; border-left: 4px solid #00AFA7; margin: 20px 0;">
+                    <p style="margin: 0;"><span style="color: #01555b;"><strong>Status:</strong></span> Completed</p>
+                    <p style="margin: 0;"><span style="color: #01555b;"><strong>Time:</strong></span> ${new Date().toUTCString()}</p>
                 </div>
-                <p>If you did <strong>not</strong> request this change, please contact our support team immediately or try to recover your account.</p>
+                <p>If you did <strong>not</strong> request this change, please contact our support team immediately or try to
+                    recover your account.</p>
                 <p>Stay safe,<br>The Meteocast Team</p>
             </div>
         `,
