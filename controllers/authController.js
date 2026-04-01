@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import ApiError from "../utils/apiError.js";
 import crypto from "crypto";
 import { Op } from "sequelize";
+import { sendAccountDeletionConfirmation, sendPasswordResetConfirmationEmail, sendPasswordResetEmail } from "../utils/email.js";
 
 export const register = async (req, res) => {
     const { email, password } = req.body;
@@ -77,11 +78,11 @@ export const logout = async (req, res) => {
 export const forgotPassword = async (req, res) => {
     const { email } = req.body;
 
-    const existringUser = await User.findOne({
+    const existingUser = await User.findOne({
         where: { email: email }
     });
 
-    if (!existringUser) {
+    if (!existingUser) {
         return res.status(200).json({
             status: "success",
             message: "Reset link sent."
@@ -94,12 +95,26 @@ export const forgotPassword = async (req, res) => {
         .update(resetToken)
         .digest('hex');
 
-    await existringUser.update({
+    await existingUser.update({
         reset_password_token: hashedToken,
         reset_password_expires: new Date(Date.now() + 15 * 60 * 1000)
     });
 
-    console.log(`Reset link: http://localhost:3000/auth/reset-password/${resetToken}`);
+    const resetLink = `http://localhost:3000/auth/reset-password/${resetToken}`;
+
+    console.log(resetLink);
+
+    try {
+        await sendPasswordResetEmail(email, resetLink);
+    } catch (error) {
+        await existingUser.update({
+            reset_password_token: null,
+            reset_password_expires: null,
+        });
+
+        throw new ApiError("There was an error sending the email. Please try again later.", 500);
+    }
+    
 
     res.status(200).json({
         status: "success",
@@ -131,6 +146,8 @@ export const resetPassword = async (req, res) => {
     existingUser.reset_password_expires = null;
 
     await existingUser.save();
+
+    await sendPasswordResetConfirmationEmail(existingUser.email);
     
     res.status(200).json({
         status: "success",
@@ -154,8 +171,10 @@ export const deleteAccount = async (req, res) => {
         sameSite: "Lax"
     });
 
+    await sendAccountDeletionConfirmation(req.user.email);
+
     res.status(200).json({
         status: "success",
-        message: "Account deleted successfuly."
+        message: "Account deleted successfully."
     });
 };
