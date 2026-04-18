@@ -11,6 +11,11 @@ const FRONTEND_URL = process.env.FRONTEND_URL;
 export const register = async (req, res) => {
     const { email, password } = req.body;
 
+    const existingUser = await User.findOne({where: {email: email}});
+    if(existingUser){
+        throw new ApiError("Email already in use.", 409);
+    }
+
     const user = await User.create({
         email: email,
         password_hash: password
