@@ -164,6 +164,13 @@ export const deleteAccount = async (req, res) => {
         throw new ApiError("No user found to delete.", 404);
     }
 
+    try{
+        await sendAccountDeletionConfirmation(req.user.email);
+    }
+    catch(error){
+        throw new ApiError("There was an error sending the email. The account was not deleted. Please try again later.", 500);
+    }
+
     await userToDelete.destroy();
 
     res.clearCookie('jwt', {
@@ -173,7 +180,7 @@ export const deleteAccount = async (req, res) => {
         sameSite: "Lax"
     });
 
-    await sendAccountDeletionConfirmation(req.user.email);
+    
 
     res.status(200).json({
         status: "success",
