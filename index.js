@@ -24,10 +24,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.get('/', (req, res) => {
-    res.status(200).json({ message: "Everything is working!" });
-});
-
 establishRelationship();
 
 const startDatabaseConnection = async () => {
@@ -44,8 +40,8 @@ const startDatabaseConnection = async () => {
 await startDatabaseConnection();
 
 
-app.use('/auth', authRoutes);
-app.use('/cities', cityRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/cities', cityRoutes);
 
 
 app.use(errorHandler);

@@ -6,6 +6,8 @@ import crypto from "crypto";
 import { Op } from "sequelize";
 import { sendAccountDeletionConfirmation, sendPasswordResetConfirmationEmail, sendPasswordResetEmail } from "../utils/email.js";
 
+const FRONTEND_URL = process.env.FRONTEND_URL;
+
 export const register = async (req, res) => {
     const { email, password } = req.body;
 
@@ -100,7 +102,7 @@ export const forgotPassword = async (req, res) => {
         reset_password_expires: new Date(Date.now() + 15 * 60 * 1000)
     });
 
-    const resetLink = `http://localhost:3000/auth/reset-password/${resetToken}`;
+    const resetLink = `${FRONTEND_URL}/auth/reset-password/${resetToken}`;
 
     console.log(resetLink);
 
