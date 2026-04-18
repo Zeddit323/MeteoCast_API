@@ -7,6 +7,7 @@ import authRoutes from "./routes/authRoutes.js";
 import cityRoutes from "./routes/cityRoutes.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import rateLimit from "express-rate-limit";
 
 const app = express();
 const PORT = process.env.PORT;
@@ -15,13 +16,18 @@ const FRONTEND_URL = process.env.FRONTEND_URL;
 app.use(express.json());
 app.use(cookieParser());
 
-
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    message: "Too many requests from this IP, please try again after 15 minutes",
+});
 const corsOptions = {
     origin: FRONTEND_URL,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true
 };
 
+app.use(limiter);
 app.use(cors(corsOptions));
 
 establishRelationship();
