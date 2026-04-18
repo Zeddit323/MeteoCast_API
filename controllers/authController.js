@@ -11,6 +11,9 @@ const FRONTEND_URL = process.env.FRONTEND_URL;
 export const register = async (req, res) => {
     const { email, password } = req.body;
 
+    if(req.cookies.jwt){
+        throw new ApiError("You are already logged in. Log out to create a new account.", 403);
+    }
     const existingUser = await User.findOne({where: {email: email}});
     if(existingUser){
         throw new ApiError("Email already in use.", 409);
