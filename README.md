@@ -81,6 +81,7 @@ Sends a password reset link to the user's email.
 |---|---|
 | 200 | Reset email sent |
 | 400 | Invalid input or lack of it |
+| 403 | User must log out first |
 
 ---
 
@@ -104,6 +105,7 @@ Resets the user's password using the token from the reset email. Sends a confirm
 | 200 | Password reset successful |
 | 400 | Invalid input or lack of it |
 | 401 | Token is invalid or expired |
+| 403 | User must log out first |
 
 ---
 
