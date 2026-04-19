@@ -44,6 +44,10 @@ export const getMyCity = async (req, res) => {
 export const addMyCity = async (req, res) => {
     const { name, latitude, longitude } = req.body;
 
+    if(!name || latitude === null || longitude === null){
+        throw new ApiError("All fields must be provided", 400);
+    }
+
     const [city, created] = await City.findOrCreate({
         where: { name: name },
         defaults: { latitude, longitude }
