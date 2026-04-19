@@ -96,6 +96,10 @@ export const logout = async (req, res) => {
 export const forgotPassword = async (req, res) => {
     const { email } = req.body;
 
+    if(req.cookies.jwt){
+        throw new ApiError("You are already logged in.", 403);
+    }
+
     if(!email){
         throw new ApiError("E-mail must be provided.", 400);
     }
@@ -147,6 +151,10 @@ export const forgotPassword = async (req, res) => {
 export const resetPassword = async (req, res) => {
     const { token } = req.params;
     const { password } = req.body;
+
+    if(req.cookies.jwt){
+        throw new ApiError("You are already logged in.", 403);
+    }
 
     if(!password){
         throw new ApiError("Password must be provided.", 400);
