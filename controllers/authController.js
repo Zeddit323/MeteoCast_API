@@ -11,6 +11,10 @@ const FRONTEND_URL = process.env.FRONTEND_URL;
 export const register = async (req, res) => {
     const { email, password } = req.body;
 
+    if(!email || !password){
+        throw new ApiError("All fields must be provided.");
+    }
+
     if(req.cookies.jwt){
         throw new ApiError("You are already logged in. Log out to create a new account.", 403);
     }
@@ -33,6 +37,10 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
     const { email, password } = req.body;
+
+    if(!email || !password){
+        throw new ApiError("All fields must be provided.", 400);
+    }
 
     const existingUser = await User.scope("withPassword")
         .findOne({ where: { email: email } });
@@ -88,6 +96,10 @@ export const logout = async (req, res) => {
 export const forgotPassword = async (req, res) => {
     const { email } = req.body;
 
+    if(!email){
+        throw new ApiError("E-mail must be provided.", 400);
+    }
+
     const existingUser = await User.findOne({
         where: { email: email }
     });
@@ -135,6 +147,13 @@ export const forgotPassword = async (req, res) => {
 export const resetPassword = async (req, res) => {
     const { token } = req.params;
     const { password } = req.body;
+
+    if(!password){
+        throw new ApiError("Password must be provided.", 400);
+    }
+    if(!token){
+        throw new ApiError("Token must be provided.", 400);
+    }
 
     const hashedToken = crypto.createHash('sha256')
         .update(token)
