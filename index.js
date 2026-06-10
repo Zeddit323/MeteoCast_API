@@ -35,9 +35,12 @@ establishRelationship();
 const startDatabaseConnection = async () => {
     try {
         await sequelize.authenticate();
+        console.log('Connection has been established successfully.');
+        await sequelize.sync({ alter: true });
+        console.log('Database schema synchronized successfully.');
+
         const userCount = await User.count();
         console.log(`The user count is: ${userCount}.`);
-        console.log('Connection has been established successfully.');
     } catch (error) {
         console.log('Unable to connect to the database:', error);
     }
