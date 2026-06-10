@@ -64,7 +64,7 @@ export const sendPasswordResetEmail = async (email, link) => {
                         Reset My Password</a>
                 </div>
                 <p>If you did <strong>not</strong> request this, please ignore this email; your password will stay exactly as it is. For your security, this link will expire in 24 hours.</p>
-                <p>Stay safe,<br>The Meteocast Team</p>
+                <p>Stay safe,<br>The MeteoCast Team</p>
             </div>
         `
     });
@@ -88,7 +88,7 @@ export const sendPasswordResetConfirmationEmail = async (email) => {
                 </div>
                 <p>If you did <strong>not</strong> request this change, please contact our support team immediately or try to
                     recover your account.</p>
-                <p>Stay safe,<br>The Meteocast Team</p>
+                <p>Stay safe,<br>The MeteoCast Team</p>
             </div>
         `
     });
@@ -116,7 +116,7 @@ export const sendAccountDeletionConfirmation = async (email) => {
                     from our systems.</p>
                 <p>If you did <strong>not</strong> request this deletion, please contact our support team immediately, though
                     please be aware that account recovery may not be possible once the process is complete.</p>
-                <p>Best regards,<br>The Meteocast Team</p>
+                <p>Best regards,<br>The MeteoCast Team</p>
             </div>
         `
     });
@@ -140,7 +140,7 @@ export const sendAccountCreationEmail = async (email, name = "there") => {
                 </div>
                 
                 <p>If you did <strong>not</strong> sign up for this account, please disregard this email or reach out to our support team to secure your information.</p>
-                <p>Clear skies ahead,<br>The Meteocast Team</p>
+                <p>Clear skies ahead,<br>The MeteoCast Team</p>
             </div>
         `
     });
