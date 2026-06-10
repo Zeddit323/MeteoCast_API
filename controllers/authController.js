@@ -211,8 +211,8 @@ export const deleteAccount = async (req, res) => {
     res.clearCookie('jwt', {
         path: '/',
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: "Lax"
+        secure: true,
+        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
     });
 
 
