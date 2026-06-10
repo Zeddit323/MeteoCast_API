@@ -126,7 +126,7 @@ export const forgotPassword = async (req, res) => {
         reset_password_expires: new Date(Date.now() + 15 * 60 * 1000)
     });
 
-    const resetLink = `${FRONTEND_URL}/auth/reset-password/${resetToken}`;
+    const resetLink = `${FRONTEND_URL}/?resetToken=${resetToken}`;
 
     console.log(resetLink);
 
