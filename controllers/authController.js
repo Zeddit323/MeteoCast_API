@@ -28,6 +28,8 @@ export const register = async (req, res) => {
         password_hash: password
     });
 
+    await sendAccountCreationEmail(email);
+
     res.status(201).json({
         status: "success",
         message: "User registered successfully.",
