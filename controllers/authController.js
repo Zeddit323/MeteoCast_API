@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import ApiError from "../utils/apiError.js";
 import crypto from "crypto";
 import { Op } from "sequelize";
-import { sendAccountDeletionConfirmation, sendPasswordResetConfirmationEmail, sendPasswordResetEmail } from "../utils/email.js";
+import { sendAccountDeletionConfirmation, sendPasswordResetConfirmationEmail, sendPasswordResetEmail, sendAccountCreationEmail } from "../utils/email.js";
 
 const FRONTEND_URL = process.env.FRONTEND_URL;
 
