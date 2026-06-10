@@ -11,15 +11,15 @@ const FRONTEND_URL = process.env.FRONTEND_URL;
 export const register = async (req, res) => {
     const { email, password } = req.body;
 
-    if(!email || !password){
+    if (!email || !password) {
         throw new ApiError("All fields must be provided.");
     }
 
-    if(req.cookies.jwt){
+    if (req.cookies.jwt) {
         throw new ApiError("You are already logged in. Log out to create a new account.", 403);
     }
-    const existingUser = await User.findOne({where: {email: email}});
-    if(existingUser){
+    const existingUser = await User.findOne({ where: { email: email } });
+    if (existingUser) {
         throw new ApiError("Email already in use.", 409);
     }
 
@@ -38,7 +38,7 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
     const { email, password } = req.body;
 
-    if(!email || !password){
+    if (!email || !password) {
         throw new ApiError("All fields must be provided.", 400);
     }
 
@@ -63,8 +63,8 @@ export const login = async (req, res) => {
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
         path: '/',
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'Lax',
+        secure: true,
+        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
     };
 
     res.cookie('jwt', token, cookieOptions);
@@ -83,8 +83,8 @@ export const logout = async (req, res) => {
     res.clearCookie('jwt', {
         path: '/',
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: "Lax"
+        secure: true,
+        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
     });
 
     res.status(200).json({
@@ -96,11 +96,11 @@ export const logout = async (req, res) => {
 export const forgotPassword = async (req, res) => {
     const { email } = req.body;
 
-    if(req.cookies.jwt){
+    if (req.cookies.jwt) {
         throw new ApiError("You are already logged in.", 403);
     }
 
-    if(!email){
+    if (!email) {
         throw new ApiError("E-mail must be provided.", 400);
     }
 
@@ -140,7 +140,7 @@ export const forgotPassword = async (req, res) => {
 
         throw new ApiError("There was an error sending the email. Please try again later.", 500);
     }
-    
+
 
     res.status(200).json({
         status: "success",
@@ -152,14 +152,14 @@ export const resetPassword = async (req, res) => {
     const { token } = req.params;
     const { password } = req.body;
 
-    if(req.cookies.jwt){
+    if (req.cookies.jwt) {
         throw new ApiError("You are already logged in.", 403);
     }
 
-    if(!password){
+    if (!password) {
         throw new ApiError("Password must be provided.", 400);
     }
-    if(!token){
+    if (!token) {
         throw new ApiError("Token must be provided.", 400);
     }
 
@@ -185,7 +185,7 @@ export const resetPassword = async (req, res) => {
     await existingUser.save();
 
     await sendPasswordResetConfirmationEmail(existingUser.email);
-    
+
     res.status(200).json({
         status: "success",
         message: "Password reset successful!"
@@ -195,14 +195,14 @@ export const resetPassword = async (req, res) => {
 export const deleteAccount = async (req, res) => {
     const userToDelete = req.user;
 
-    if(!userToDelete){
+    if (!userToDelete) {
         throw new ApiError("No user found to delete.", 404);
     }
 
-    try{
+    try {
         await sendAccountDeletionConfirmation(req.user.email);
     }
-    catch(error){
+    catch (error) {
         throw new ApiError("There was an error sending the email. The account was not deleted. Please try again later.", 500);
     }
 
@@ -215,7 +215,7 @@ export const deleteAccount = async (req, res) => {
         sameSite: "Lax"
     });
 
-    
+
 
     res.status(200).json({
         status: "success",
