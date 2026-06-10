@@ -1,27 +1,49 @@
 import "dotenv/config";
-import nodemailer from "nodemailer";
 
-const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: process.env.SMTP_PORT,
-    ...(process.env.SMTP_USER && {
-        auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS,
+const BREVO_API_KEY = process.env.BREVO_API_KEY;
+const SENDER_EMAIL = process.env.BREVO_VERIFIED_SENDER;
+
+// Helper function to handle the native fetch request to Brevo's v3 SMTP endpoint
+const sendBrevoEmail = async ({ toEmail, subject, textContent, htmlContent }) => {
+    try {
+        const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+            method: "POST",
+            headers: {
+                "accept": "application/json",
+                "api-key": BREVO_API_KEY,
+                "content-type": "application/json"
+            },
+            body: JSON.stringify({
+                sender: { name: "Meteocast Support", email: SENDER_EMAIL },
+                to: [{ email: toEmail }],
+                subject: subject,
+                textContent: textContent,
+                htmlContent: htmlContent
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || `Brevo API responded with status ${response.status}`);
         }
-    }),
-});
 
-//TODO: Write nice html for mails
+        console.log(`Email ("${subject}") successfully sent to ${toEmail}. MessageID:`, data.messageId);
+        return { success: true, data };
+    } catch (error) {
+        console.error(`CRITICAL MAIL ERROR [${subject}]:`, error.message);
+        return { success: false, error: error.message };
+    }
+};
 
+// 1. Send Password Reset Link Email
 export const sendPasswordResetEmail = async (email, link) => {
-    await transporter.sendMail({
-        from: '"Meteocast Support" <no-reply@meteocast.com>',
-        to: email,
+    return await sendBrevoEmail({
+        toEmail: email,
         subject: "Password Reset Request",
-        text: `Forgot your password? Reset it here: ${link}`,
-        html: `
-            <div style="color: #f9f9f9; background-image: linear-gradient(to right, #69D7FF, #00AFA7); font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #01555b; padding: 20px;">
+        textContent: `Forgot your password? Reset it here: ${link}`,
+        htmlContent: `
+             <div style="color: #f9f9f9; background-image: linear-gradient(to right, #69D7FF, #00AFA7); font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #01555b; padding: 20px;">
                 <h2 style="color: #01555b;">Forgot your password?</h2>
                 <p>Hi there,</p>
                 <p>It happens to the best of us! We received a request to reset the password for your <strong>Meteocast</strong> account. You can get back into your account by clicking the button below to choose a new one:</p>
@@ -44,17 +66,17 @@ export const sendPasswordResetEmail = async (email, link) => {
                 <p>If you did <strong>not</strong> request this, please ignore this email; your password will stay exactly as it is. For your security, this link will expire in 24 hours.</p>
                 <p>Stay safe,<br>The Meteocast Team</p>
             </div>
-        `,
+        `
     });
 };
 
+// 2. Send Password Reset Confirmation Email
 export const sendPasswordResetConfirmationEmail = async (email) => {
-    await transporter.sendMail({
-        from: '"Meteocast Support" <no-reply@meteocast.com>',
-        to: email,
+    return await sendBrevoEmail({
+        toEmail: email,
         subject: "Your password has been reset",
-        text: "Success! Your Meteocast password was recently changed. If this was you, you can safely ignore this email.",
-        html: `
+        textContent: "Success! Your Meteocast password was recently changed. If this was you, you can safely ignore this email.",
+        htmlContent: `
             <div style="color: #f9f9f9; background-image: linear-gradient(to right, #69D7FF, #00AFA7); font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #01555b; padding: 20px;">
                 <h2 style="color: #01555b;">Password Changed Successfully</h2>
                 <p>Hi there,</p>
@@ -68,17 +90,17 @@ export const sendPasswordResetConfirmationEmail = async (email) => {
                     recover your account.</p>
                 <p>Stay safe,<br>The Meteocast Team</p>
             </div>
-        `,
+        `
     });
 };
 
+// 3. Send Account Deletion Confirmation Email
 export const sendAccountDeletionConfirmation = async (email) => {
-    await transporter.sendMail({
-        from: '"Meteocast Support" <no-reply@meteocast.com>',
-        to: email,
+    return await sendBrevoEmail({
+        toEmail: email,
         subject: "Your account has been deleted",
-        text: "Your account has been deleted successfully. If this was you, you can safely ignore this email.",
-        html: `
+        textContent: "Your account has been deleted successfully. If this was you, you can safely ignore this email.",
+        htmlContent: `
             <div style="color: #f9f9f9; background-image: linear-gradient(to right, #69D7FF, #00AFA7); font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #01555b; padding: 20px;">
                 <h2 style="color: #01555b;">Account Deleted Successfully</h2>
                 <p>Hi there,</p>
@@ -96,6 +118,6 @@ export const sendAccountDeletionConfirmation = async (email) => {
                     please be aware that account recovery may not be possible once the process is complete.</p>
                 <p>Best regards,<br>The Meteocast Team</p>
             </div>
-        `,
+        `
     });
 };
