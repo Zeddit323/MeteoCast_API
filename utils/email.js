@@ -14,7 +14,7 @@ const sendBrevoEmail = async ({ toEmail, subject, textContent, htmlContent }) =>
                 "content-type": "application/json"
             },
             body: JSON.stringify({
-                sender: { name: "Meteocast Support", email: SENDER_EMAIL },
+                sender: { name: "MeteoCast Support", email: SENDER_EMAIL },
                 to: [{ email: toEmail }],
                 subject: subject,
                 textContent: textContent,
