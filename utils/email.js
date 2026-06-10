@@ -121,3 +121,46 @@ export const sendAccountDeletionConfirmation = async (email) => {
         `
     });
 };
+
+// 4. Send Account Creation Welcome Email
+export const sendAccountCreationEmail = async (email, name = "there") => {
+    return await sendBrevoEmail({
+        toEmail: email,
+        subject: "Welcome to MeteoCast!",
+        textContent: `Welcome to MeteoCast, ${name}! Your account has been successfully created. Start exploring your weather forecasts now.`,
+        htmlContent: `
+            <div style="color: #f9f9f9; background-image: linear-gradient(to right, #69D7FF, #00AFA7); font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #01555b; padding: 20px;">
+                <h2 style="color: #01555b;">Welcome to MeteoCast!</h2>
+                <p>Hi ${name},</p>
+                <p>We're thrilled to have you on board! Your <strong>MeteoCast</strong> account has been successfully created. You now have access to hyper-local weather insights, real-time alerts, and personalized forecasts.</p>
+                
+                <div style="color: #00aab7; background-color: #caf0fd; padding: 15px; border-left: 4px solid #00AFA7; margin: 20px 0;">
+                    <p style="margin: 0;"><span style="color: #01555b;"><strong>Account Status:</strong></span> Active</p>
+                    <p style="margin: 0;"><span style="color: #01555b;"><strong>Registered Email:</strong></span> ${email}</p>
+                </div>
+
+                <p>Ready to see what the skies have in store for you? Click the button below to log in and set up your dashboard:</p>
+                
+                <div style="display: flex; justify-content: center; margin: 20px 0;">
+                    <a style="
+                        width: 60%;
+                        padding: 3%;
+                        border-radius: 10px;
+                        border: none;
+                        background-color: #008b95;
+                        color: #f9f9f9;
+                        font-size: 1.3rem;
+                        font-weight: bold;
+                        text-decoration: none;
+                        text-align: center;"
+                        href="https://meteocast.com/login" 
+                    >
+                        Explore Your Dashboard</a>
+                </div>
+                
+                <p>If you did <strong>not</strong> sign up for this account, please disregard this email or reach out to our support team to secure your information.</p>
+                <p>Clear skies ahead,<br>The Meteocast Team</p>
+            </div>
+        `
+    });
+};
