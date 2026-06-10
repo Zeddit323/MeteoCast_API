@@ -138,25 +138,6 @@ export const sendAccountCreationEmail = async (email, name = "there") => {
                     <p style="margin: 0;"><span style="color: #01555b;"><strong>Account Status:</strong></span> Active</p>
                     <p style="margin: 0;"><span style="color: #01555b;"><strong>Registered Email:</strong></span> ${email}</p>
                 </div>
-
-                <p>Ready to see what the skies have in store for you? Click the button below to log in and set up your dashboard:</p>
-                
-                <div style="display: flex; justify-content: center; margin: 20px 0;">
-                    <a style="
-                        width: 60%;
-                        padding: 3%;
-                        border-radius: 10px;
-                        border: none;
-                        background-color: #008b95;
-                        color: #f9f9f9;
-                        font-size: 1.3rem;
-                        font-weight: bold;
-                        text-decoration: none;
-                        text-align: center;"
-                        href="https://meteocast.com/login" 
-                    >
-                        Explore Your Dashboard</a>
-                </div>
                 
                 <p>If you did <strong>not</strong> sign up for this account, please disregard this email or reach out to our support team to secure your information.</p>
                 <p>Clear skies ahead,<br>The Meteocast Team</p>
