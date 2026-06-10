@@ -1,4 +1,4 @@
-import "dotenv/config";
+
 
 const errorHandler = (err, req, res, next) => {
     let statusCode = err.statusCode || 500;

@@ -1,4 +1,4 @@
-import "dotenv/config";
+
 import jwt from "jsonwebtoken";
 import ApiError from "../utils/apiError.js";
 import { User } from "../models/index.js";

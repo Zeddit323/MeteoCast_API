@@ -1,4 +1,4 @@
-import "dotenv/config";
+
 import express from 'express';
 import sequelize from "./config/db.js";
 import { establishRelationship, User } from "./models/index.js";

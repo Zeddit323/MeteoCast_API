@@ -1,4 +1,4 @@
-import "dotenv/config";
+
 
 const BREVO_API_KEY = process.env.BREVO_API_KEY;
 const SENDER_EMAIL = process.env.BREVO_VERIFIED_SENDER;
